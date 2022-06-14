@@ -2,7 +2,7 @@
   "name": "narrator-bot",
   "version": "2.0.0",
   "description": "A discord bot that simulates the game Wolvesville and Town of Salem",
-  "main": "src/server.ts"
+  "main": "src/server.ts",
   "scripts": {
     "test": "mocha",
     "start": "node src/serevr.ts",

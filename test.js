@@ -1,5 +1,5 @@
-const expect = require("expect.js")
-const fs = require("fs")
+const expect = require("expect.js");
+const fs = require("fs");
 
 /*describe("Commands", () => {
     fs.readdir("./commands/", (err, files) => {
@@ -72,6 +72,6 @@ describe("l10n", () => {
 })**/
 
 Object.filter = (obj, predicate) =>
-    Object.keys(obj)
-        .filter((key) => predicate(obj[key]))
-        .reduce((res, key) => ((res[key] = obj[key]), res), {})
+  Object.keys(obj)
+    .filter((key) => predicate(obj[key]))
+    .reduce((res, key) => ((res[key] = obj[key]), res), {});

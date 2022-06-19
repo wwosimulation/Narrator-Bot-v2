@@ -5,12 +5,14 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "mocha",
-    "start": "node src/server.ts",
+    "start": "npx ts-node src/server.ts",
     "prettier": "npx prettier --check ."
   },
   "author": "Wolvesville Simulation",
   "license": "GNU",
   "dependencies": {
+    "@octokit/auth-app": "^3.6.1",
+    "@octokit/core": "^3.6.0",
     "@sentry/node": "^7.1.1",
     "@sentry/tracing": "^7.1.1",
     "@types/mongoose": "^5.11.97",

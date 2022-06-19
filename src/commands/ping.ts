@@ -1,0 +1,15 @@
+import { CommandInteraction } from "discord.js";
+import Command = require("../classes/command");
+import { ExtendedClient } from "../server";
+
+let command = new Command({
+    commandObject: {
+        name: "ping",
+        description: "Pong!",
+    },
+    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+        interaction.reply({content: `Pong! ${client.ws.ping}ms`});
+    }
+});
+
+module.exports = command;

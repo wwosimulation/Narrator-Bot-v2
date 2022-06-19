@@ -43,5 +43,5 @@ yarn.lock
 package.lock
 
 # Ignore Custom files
-.pem
-.sqlite
+*.pem
+*.sqlite

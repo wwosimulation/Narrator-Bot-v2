@@ -6,7 +6,7 @@ These schemas are then exported from this file in an object.
 
 Usage: 
 
-const { botban } = require("./db.js")
+const { botban } = require("./db.ts")
 let ban = await botban.findOne({user: message.author.id}).exec()
 message.channel.send(ban)
 
@@ -23,9 +23,9 @@ var db = require("quick.db");
 
 module.exports = {}
 
-const routeFiles = fs.readdirSync(__dirname + "/schemas").filter((file) => file.endsWith(".ts"))
-for (const file of routeFiles) {
-    const route = require(`./schemas/${file}`)
+let routeFiles = fs.readdirSync(__dirname + "/schemas").filter((file) => file.endsWith(".ts"))
+for (let file of routeFiles) {
+    let route = require(`./schemas/${file}`)
     module.exports[`${file.split(`.`).shift()}`] = route
 }
 

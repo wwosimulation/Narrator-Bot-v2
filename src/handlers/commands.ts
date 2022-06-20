@@ -44,13 +44,26 @@ client.commands.each((command: Command) => {
         }
     });
 });
-// Delete commands that aren't in the command list
+// Delete commands that aren't in the command list (global)
 client.application.commands.fetch().then((commands: Collection<string, ApplicationCommand>) => {
     commands.each((command: ApplicationCommand) => {
         if (!client.commands.has(command.name)) {
             command.delete().then((cmd: ApplicationCommand) => {
-                console.log(`Deleted command ${cmd.name}`);
+                console.log(`Deleted command ${cmd.name} (global)`);
             });
         }
     });
 });
+// Delete commands that aren't in the command list (guild)
+client.guilds.cache.each((guild: Guild) => {
+    guild.commands.fetch().then((commands: Collection<string, ApplicationCommand>) => {
+        commands.each((command: ApplicationCommand) => {
+            if (!client.commands.has(command.name)) {
+                command.delete().then((cmd: ApplicationCommand) => {
+                    console.log(`Deleted command ${cmd.name} in ${guild.name} (${guild.id})`);
+                });
+            }
+        });
+    })
+});
+console.log("----------------\nCommands updated\n----------------");

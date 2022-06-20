@@ -5,7 +5,7 @@ import { ExtendedClient } from "../server";
 let command = new Command({
     commandObject: {
         name: "ping",
-        description: "Pong!",
+        description: "Pong! Returns the latency of the bot.",
     },
     run: async (interaction: CommandInteraction, client: ExtendedClient) => {
         interaction.reply({content: `Pong! ${client.ws.ping}ms`});

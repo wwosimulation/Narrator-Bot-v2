@@ -52,6 +52,6 @@ class ExtendedClient extends Client {
 
 let client = new ExtendedClient();
 require("./managers/eventManager");
-require("./managers/commandManager");
+//require("./managers/commandManager");
 client.login(process.env.DISCORD_TOKEN);
 export { ExtendedClient, client };

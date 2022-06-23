@@ -1,6 +1,6 @@
-var mongoose = require("mongoose")
+import { model, Schema } from "mongoose"
 
-var schema = new mongoose.Schema({
+var schema = new Schema({
     user: { type: String, unique: true, required: true }, // user id
     coins: { type: Number, default: 25 }, // coins aka balance
     roses: { type: Number, default: 0 }, // roses CURRENCY
@@ -69,4 +69,4 @@ var schema = new mongoose.Schema({
     badges: { type: Object, default: {} },
 })
 
-module.exports = mongoose.model("players", schema)
+export default model("players", schema)

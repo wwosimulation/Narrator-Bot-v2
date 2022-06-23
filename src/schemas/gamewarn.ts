@@ -1,13 +1,14 @@
-var mongoose = require("mongoose")
+import { model, Schema } from "mongoose"
+import { set, get } from "quick.db"
 
-var schema = new mongoose.Schema({
+var schema = new Schema({
     index: {
         type: Number,
         index: true,
         unique: true,
         default: () => {
-            db.set("gamewarnIndex", db.get("gamewarnIndex") + 1)
-            return db.get("gamewarnIndex")
+            set("gamewarnIndex", get("gamewarnIndex") + 1)
+            return get("gamewarnIndex")
         },
     },
     user: { type: String, required: true },
@@ -21,4 +22,4 @@ var schema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("gamewarns", schema)
+export default model("gamewarns", schema)

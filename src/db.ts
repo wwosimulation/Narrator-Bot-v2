@@ -12,10 +12,8 @@ message.channel.send(ban)
 
 */
 
-var mongoose = require("mongoose")
-var gamewarns = require("./schemas/gamewarn.ts")
-var fs = require("fs");
-var db = require("quick.db");
+import { readdirSync } from "fs"
+import * as db from "quick.db";
 
 
 
@@ -23,7 +21,7 @@ var db = require("quick.db");
 
 module.exports = {}
 
-let routeFiles = fs.readdirSync(__dirname + "/schemas").filter((file) => file.endsWith(".ts"))
+let routeFiles = readdirSync(__dirname + "/schemas").filter((file: string) => file.endsWith(".ts"))
 for (let file of routeFiles) {
     let route = require(`./schemas/${file}`)
     module.exports[`${file.split(`.`).shift()}`] = route

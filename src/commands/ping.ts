@@ -1,5 +1,5 @@
 import { CommandInteraction } from "discord.js";
-import Command = require("../classes/command");
+import Command = require("../config/classes/command");
 import { ExtendedClient } from "../server";
 
 let command = new Command({

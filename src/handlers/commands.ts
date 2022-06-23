@@ -1,6 +1,6 @@
 import { ApplicationCommand, Guild, Collection } from "discord.js";
 import { readdirSync } from "fs";
-import Command = require("../classes/command");
+import Command = require("../config/classes/command");
 import { client } from "../server";
 
 // Get commands

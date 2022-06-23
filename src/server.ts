@@ -14,7 +14,7 @@ if(db.get("emergencystop")) {
 }
 
 import { Client, Collection } from "discord.js";
-import Command = require("./classes/command");
+import Command = require("./config/classes/command");
 
 class ExtendedClient extends Client {
     config: any;

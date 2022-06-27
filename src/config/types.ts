@@ -10,3 +10,5 @@ And use them in the following way:
 import { Interaction, User, UserResolvable } from "discord.js";
 
 export type UserResolvables = User | UserResolvable | string | Interaction;
+export type aura = "evil" | "good" | "unknown";
+export type team = "village" | "werewolves" | "solo killer" | "solo voting" | "sect" | "zombies" | "couple" | "solo";

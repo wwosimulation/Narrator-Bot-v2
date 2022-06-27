@@ -16,9 +16,9 @@ and can be used without creating an instance of the class:
 */
 
 
-import { Interaction, User, Util } from "discord.js";
+import { Collection, Emoji, Interaction, Message, MessageActionRow, MessageButton, Snowflake, User, Util } from "discord.js";
 import players from "../schemas/player";
-import { client } from "../server";
+import { client, ExtendedClient } from "../server";
 
 // Types
 import { UserResolvables } from "./types";
@@ -26,15 +26,6 @@ import { UserResolvables } from "./types";
 class Utils {
     static util = Util;
     private constructor() { }
-
-    // Check if a user is in the beta group
-    static async isBeta(user: UserResolvables): Promise<boolean> {
-        let userId = this.resolveUserId(user);
-        if(!userId) return false;
-        let player = await players.findOne({ user: userId });
-        if (player?.badges?.includes("beta")) return true;
-        else return false;
-    }
 
     // Get the user id from a user
     static resolveUserId(user: UserResolvables): string {
@@ -53,4 +44,85 @@ class Utils {
         }
     }
 
+    // Check if a user is in the beta group
+    static async isBeta(user: UserResolvables): Promise<boolean> {
+        let userId = this.resolveUserId(user);
+        if (!userId) return false;
+        let player = await players.findOne({ user: userId });
+        if (player?.badges?.includes("beta")) return true;
+        else return false;
+    }
+
+    static async isDev(user: UserResolvables): Promise<boolean> {
+        let userId = this.resolveUserId(user);
+        if (!userId) return false;
+        let player = await players.findOne({ user: userId });
+        if (player?.badges?.some((element: string) => /dev/g.test(element))) return true;
+        else return false;
+    }
+
+    static async isStaff(user: UserResolvables): Promise<boolean> {
+        let userId = this.resolveUserId(user);
+        if (!userId) return false;
+        let player = await players.findOne({ user: userId });
+        if (player?.badges?.includes("staff")) return true;
+        else return false;
+    }
+
+    static async isNarrator(user: UserResolvables): Promise<boolean> {
+        let userId = this.resolveUserId(user);
+        if (!userId) return false;
+        let player = await players.findOne({ user: userId });
+        if (player?.badges?.some((element: string) => /narrator/g.test(element))) return true;
+        else return false;
+    }
+
+    static sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    static getEmoji(name: string, client: ExtendedClient): Emoji {
+        return client.emojis.cache.find(emoji => emoji.name.toLowerCase() == name.toLowerCase() && emoji.available) ?? client.emojis.cache.find(emoji => emoji.name.toLowerCase() == "error")
+    }
+
+    static capitalizeFirstLetter(string: string): string {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    static capitalizeAll(string: string): string {
+        return string.split(" ").map(word => this.capitalizeFirstLetter(word)).join(" ");
+    }
+
+    static randomWeight(options: Object[]): Snowflake {
+        let i = 0;
+        let weights = [];
+        for (i = 0; i < options.length; i++) {
+            weights[i] = (Object.values(options[i])) + (weights[i - 1] ?? 0);
+        }
+
+        let random = Math.floor(Math.random() * weights[weights.length - 1]);
+        for (i = 0; i < weights.length; i++) {
+            if (random < weights[i]) break;
+        }
+        return Object.keys(options[i])[0]
+    }
+
+    static disableButtons(message: Message) {
+        message.components.forEach(component => {
+            component.components.forEach(button => {
+                button.setDisabled(true);
+            });
+        });
+
+        return {
+            content: message.content ||  null,
+            embeds: message.embeds || [],
+            components: message.components || []
+        };
+    }
+
 }
+new MessageButton({customId: "test", label: "test", style: "SUCCESS"});
+
+export default Utils;
+export { Utils };

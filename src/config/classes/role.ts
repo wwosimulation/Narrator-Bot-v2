@@ -34,5 +34,3 @@ class Role {
         }
     }
 }
-
-// Exeptions for roles

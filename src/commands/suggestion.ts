@@ -16,7 +16,7 @@ let command = new Command({
             {
                 type: "STRING",
                 name: "description",
-                description: "A detailed description of the suggestion including all neccessary information and a reason to implement it",
+                description: "A detailed description of the suggestion including information and reasons",
                 required: true,
             },
             {

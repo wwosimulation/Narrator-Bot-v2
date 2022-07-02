@@ -13,8 +13,7 @@
   "dependencies": {
     "@octokit/auth-app": "^3.6.1",
     "@octokit/core": "^3.6.0",
-    "@sentry/node": "^7.1.1",
-    "@sentry/tracing": "^7.1.1",
+    "@sentry/node": "^7.4.1",
     "@types/mongoose": "^5.11.97",
     "discord.js": "^13.8.0",
     "dotenv": "^16.0.1",

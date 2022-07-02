@@ -51,7 +51,16 @@ class ExtendedClient extends Client {
 }
 
 let client = new ExtendedClient();
-require("./managers/eventManager");
-//require("./managers/commandManager");
+
+require("./handlers/events");
+
+import * as Sentry from "@sentry/node";
+
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    tracesSampleRate: 1.0,
+});
+
 client.login(process.env.DISCORD_TOKEN);
+
 export { ExtendedClient, client };

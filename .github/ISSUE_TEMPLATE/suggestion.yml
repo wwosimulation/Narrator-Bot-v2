@@ -1,0 +1,51 @@
+name: Suggestion
+description: Start a suggestion.
+title: "[SUGGESTION]: "
+labels: ["Suggestion", "Unapproved"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What is your suggestion?
+      description: Please try to explain your suggestion in as much detail as possible. Also include a reason why we should implement this suggestion or how it will improve the bot.
+      placeholder: Enter your suggestion here
+    validations:
+      required: true
+
+  - type: dropdown
+    id: part
+    attributes:
+      label: What part of the bot is this suggestion about?
+      description: Please select the part of the bot that this suggestion is about.
+      options:
+        - Commands
+        - Permissions
+        - Economy
+        - Wolvesville
+        - Town of Salem
+        - None of these
+    validations:
+      required: true
+
+  - type: dropdown
+    id: origin
+    attributes:
+      label: What is the origin of this suggestion?
+      description: Please select the origin of this suggestion.
+      options:
+        - Staff Vote
+        - Community Vote
+        - Dev Assistant
+        - Bot User/Member
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: user-id
+    attributes:
+      label: Who suggested this?
+      description: "Please enter your user ID here. This is required to be able to assign the suggestion to you and reach out for further questions. [Can't find your user ID?](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-user-ID-)"
+      placeholder: e.g. 517335997172809728
+    validations:
+      required: true

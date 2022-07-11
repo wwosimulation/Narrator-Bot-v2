@@ -33,26 +33,41 @@ let command = new Command({
         let user = interaction.options.getUser("user") ?? interaction.user;
         let part = interaction.options.getString("part") ?? "profile-card";
         let guy = await player.findOne({ user: user.id }) || await player.create({ user: user.id });
-        console.log(guy);
-        await guy.updateOne({$set: {badges: [{name: "test", unlockedAt: new Date()}]}});
 
         switch (part) {
             case "badges":
                 let description = "";
                 for (let badge of guy.badges) {
-                    description +=  `[${badge.name}] - ${Utils.getDateString(badge.unlockedAt)}\n`;
+                    description += `[${badge.name}] - ${Utils.getDateString(badge.unlockedAt)}\n`;
                 }
-                description = description.length > 0 ? "```scss\n" + description + "```": "*No badges yet.*";
+                description = description.length > 0 ? "```scss\n" + description + "```" : "*No badges yet.*";
 
-                let embed = {
+                let embed_badges = {
                     title: `Badges for ${user.username}`,
                     description,
                     color: 5793266,
                     timestamp: new Date(),
                 }
-                interaction.reply({ embeds: [embed] });
+                interaction.reply({ embeds: [embed_badges] });
                 break;
             case "inventory":
+                let embed_inv = {
+                    title: `Inventory for ${user.username}`,
+                    description: "**Currencies:**",
+                    fields: [
+                        { name: "Coins", value: `${guy.coins} ${Utils.getEmoji("coins", client)}`, inline: true },
+                        { name: "Gems", value: `${guy.gems} ${Utils.getEmoji("gems", client)}`, inline: true },
+                        { name: "Roses", value: `${guy.roses} ${Utils.getEmoji("rose", client)}`, inline: true },
+                        { name: "Items:", value: `Roses: ${guy.inventory.rose} ${Utils.getEmoji("rose", client)}\nBouquets: ${guy.inventory.bouquet} ${Utils.getEmoji("bouquet", client)}\nLootboxes: ${guy.inventory.lootbox} ${Utils.getEmoji("lootbox", client)}` },
+                    ],
+                    color: 5793266,
+                    timestamp: new Date(),
+                    author: {
+                        name: `${user.tag}`,
+                        icon_url: user.avatarURL(),
+                    }
+                }
+                interaction.reply({ embeds: [embed_inv] });
                 break;
             case "stats":
                 break;

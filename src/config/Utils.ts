@@ -26,6 +26,7 @@ import { UserResolvables } from "./types";
 class Utils {
     static util = Util;
     private constructor() { }
+    static months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Get the user id from a user
     static resolveUserId(user: UserResolvables): string {
@@ -121,8 +122,29 @@ class Utils {
         };
     }
 
+    static getDateString(date: Date): string {
+        // add st, nd, rd etc to the end of the day
+        let day = date.getUTCDate();
+        let suffix = "th";
+        if (day < 4 || day > 20) {
+            switch (day % 10) {
+                case 1:
+                    suffix = "st";
+                    break;
+                case 2:
+                    suffix = "nd";
+                    break;
+                case 3:
+                    suffix = "rd";
+                    break;
+                default:
+                    suffix = "th";
+                    break;
+            }
+        }
+        return `${date.getUTCDate()}${suffix} ${this.months[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+    }
 }
-new MessageButton({customId: "test", label: "test", style: "SUCCESS"});
 
 export default Utils;
 export { Utils };

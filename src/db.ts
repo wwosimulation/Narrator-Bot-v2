@@ -14,10 +14,15 @@ message.channel.send(ban)
 
 import { readdirSync } from "fs"
 import * as db from "quick.db";
+import * as mongoose from "mongoose";
 
 
-
-//mongoose.connect(process.env.MONGODB, {})
+mongoose.connect(process.env.MONGODB, {}).then(() => {
+    console.log("Connected to MongoDB");
+}).catch(err => {
+    console.log("Error connecting to MongoDB");
+    console.log(err);
+});
 
 module.exports = {}
 
@@ -32,8 +37,9 @@ Object().filter = (obj, predicate) =>
         .filter((key) => predicate(obj[key]))
         .reduce((res, key) => ((res[key] = obj[key]), res), {})
 
-let x = { index: -1 }
+/*let x = { index: -1 }
 setTimeout(async () => {
     x = db.get("gamewarnIndex") || (await module.exports.gamewarn.findOne({}).sort({ index: -1 }))
     await db.set("gamewarnIndex", x.index)
 }, 1000)
+*/

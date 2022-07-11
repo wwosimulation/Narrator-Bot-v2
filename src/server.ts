@@ -22,6 +22,7 @@ class ExtendedClient extends Client {
     info: { branch: string; commit: string; }; // Set in the ready event
     github: Octokit;
     commands: Collection<String, Command>;
+    mongo: any;
 
     constructor() {
         super({intents: [
@@ -53,6 +54,7 @@ class ExtendedClient extends Client {
 let client = new ExtendedClient();
 
 require("./handlers/events");
+require("./db");
 
 import * as Sentry from "@sentry/node";
 

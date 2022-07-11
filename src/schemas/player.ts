@@ -66,7 +66,7 @@ var schema = new Schema({
     },
     winStreak: { type: Number, default: 0 },
     language: { type: String, default: "en" },
-    badges: { type: Object, default: {} },
+    badges: { type: Array, default: [] },
 })
 
 export default model("players", schema)

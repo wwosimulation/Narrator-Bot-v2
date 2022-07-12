@@ -31,7 +31,7 @@ let command = new Command({
     },
     run: async (interaction: CommandInteraction, client: ExtendedClient) => {
         let user = interaction.options.getUser("user") ?? interaction.user;
-        let part = interaction.options.getString("part") ?? "profile-card";
+        let part = interaction.options.getString("part") ?? "profile";
         let guy = await player.findOne({ user: user.id }) || await player.create({ user: user.id });
 
         switch (part) {

@@ -14,7 +14,6 @@ let command = new Command({
             commit: client.info.commit,
             uptime: client.uptime,
             version: require(process.cwd() + "/package.json").version,
-            // get the current commit message
             commitMessage: require("child_process").execSync("git log -1 --pretty=%B").toString().trim(),
         }
 

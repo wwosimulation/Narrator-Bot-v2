@@ -66,4 +66,3 @@ client.guilds.cache.each((guild: Guild) => {
         });
     })
 });
-console.log("----------------\nCommands updated\n----------------");

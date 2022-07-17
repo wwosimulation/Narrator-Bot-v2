@@ -1,49 +1,103 @@
-import { CommandInteraction } from "discord.js";
 import Command = require("../config/classes/command");
 import player from "../schemas/player";
 import { ExtendedClient } from "../server";
 import { Utils } from "../config/Utils";
+import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
+import { DBUser } from "../config/types";
 
 let command = new Command({
     commandObject: {
         name: "profile",
-        description: "Display some information about your/another user.",
+        description: "Display some information about you/another user.",
         options: [
             {
-                name: "user",
-                description: "The user to display information about. Default is yourself.",
-                type: "USER",
-                required: false,
+                type: "SUB_COMMAND",
+                name: "badges",
+                description: "Display the badges of a user.",
+                options: [
+                    {
+                        name: "user",
+                        description: "The user to display information about. Pasting userID also works.",
+                        type: "USER",
+                        required: false,
+                    },
+                ],
             },
             {
-                name: "part",
-                description: "The part of the profile to display. Default is \"profile-card\"",
-                type: "STRING",
-                required: false,
-                choices: [
-                    { name: "badges", value: "badges" },
-                    { name: "inventory", value: "inventory" },
-                    { name: "stats", value: "stats" },
-                    { name: "profile-card", value: "profile" },
-                ]
+                type: "SUB_COMMAND",
+                name: "inventory",
+                description: "Display the inventory of a user.",
+                options: [
+                    {
+                        name: "user",
+                        description: "The user to display information about. Pasting userID also works.",
+                        type: "USER",
+                        required: false,
+                    },
+                ],
+            },
+            {
+                type: "SUB_COMMAND",
+                name: "card",
+                description: "Display the profile card of a user.",
+                options: [
+                    {
+                        name: "user",
+                        description: "The user to display information about. Pasting userID also works.",
+                        type: "USER",
+                        required: false,
+                    },
+                ],
+            },
+            {
+                type: "SUB_COMMAND",
+                name: "stats",
+                description: "Display the stats of a user.",
+                options: [
+                    {
+                        name: "game",
+                        description: "The game to display information about.",
+                        type: "STRING",
+                        required: true,
+                        choices: [
+                            { name: "WOV", value: "wov" }
+                        ]
+                    },
+                    {
+                        name: "user",
+                        description: "The user to display information about. Pasting userID also works.",
+                        type: "USER",
+                        required: false,
+                    }
+                ],
             }
         ]
     },
-    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+    run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
         let user = interaction.options.getUser("user") ?? interaction.user;
-        let part = interaction.options.getString("part") ?? "profile";
-        let guy = await player.findOne({ user: user.id }) || await player.create({ user: user.id });
+        let sub = interaction.options.getSubcommand(true)
+        let guy: DBUser = await player.findOne({ user: user.id })
+        if (!guy) {
+            interaction.reply({ content: interaction.i18n("not_found.user"), ephemeral: true });
+            return;
+        }
 
-        switch (part) {
+        // check for private profile
+        if (guy.settings.private && interaction.user.id !== guy.user && !await Utils.isDev(interaction) && !await Utils.isStaff(interaction) && !await Utils.isNarrator(interaction)) {
+            interaction.reply({ content: interaction.i18n("no_access.private"), ephemeral: true });
+            return;
+        }
+
+        switch (sub) {
             case "badges":
-                let description = "";
-                for (let badge of guy.badges) {
+                var description = "";
+                guy.inventory.badges.forEach((badge) => {
                     description += `[${badge.name}] - ${Utils.getDateString(badge.unlockedAt)}\n`;
-                }
-                description = description.length > 0 ? "```scss\n" + description + "```" : "*No badges yet.*";
+                })
+                description = description.length > 0 ? "```scss\n" + description + "```" : interaction.i18n("inventory.no_badges");
 
                 let embed_badges = {
-                    title: `Badges for ${user.username}`,
+                    title: `${user.tag}: ${interaction.i18n("inventory.badges")}`,
                     description,
                     color: 5793266,
                     timestamp: new Date(),
@@ -52,13 +106,17 @@ let command = new Command({
                 break;
             case "inventory":
                 let embed_inv = {
-                    title: `Inventory for ${user.username}`,
-                    description: "**Currencies:**",
+                    title: `${user.username}: ${interaction.i18n("inventory.inventory")}`,
+                    description: `**${Utils.capitalizeFirstLetter(interaction.i18n("inventory.currencies"))}**`,
                     fields: [
-                        { name: "Coins", value: `${guy.coins} ${Utils.getEmoji("coins", client)}`, inline: true },
-                        { name: "Gems", value: `${guy.gems} ${Utils.getEmoji("gems", client)}`, inline: true },
-                        { name: "Roses", value: `${guy.roses} ${Utils.getEmoji("rose", client)}`, inline: true },
-                        { name: "Items:", value: `Roses: ${guy.inventory.rose} ${Utils.getEmoji("rose", client)}\nBouquets: ${guy.inventory.bouquet} ${Utils.getEmoji("bouquet", client)}\nLootboxes: ${guy.inventory.lootbox} ${Utils.getEmoji("lootbox", client)}` },
+                        { name: Utils.capitalizeFirstLetter(interaction.i18n("inventory.coins")), value: `${guy.inventory.currencies.coins} ${Utils.getEmoji("coins", client)}`, inline: true },
+                        { name: Utils.capitalizeFirstLetter(interaction.i18n("inventory.gems")), value: `${guy.inventory.currencies.gems} ${Utils.getEmoji("gems", client)}`, inline: true },
+                        { name: Utils.capitalizeFirstLetter(interaction.i18n("inventory.roses")), value: `${guy.inventory.currencies.roses} ${Utils.getEmoji("rose", client)}`, inline: true },
+                        {
+                            name: `**${Utils.capitalizeFirstLetter(interaction.i18n("inventory.items"))}:**`, value: `${Utils.capitalizeFirstLetter(interaction.i18n("inventory.roses"))}: ${guy.inventory.items.roses} ${Utils.getEmoji("rose", client)}\n` +
+                                `${Utils.capitalizeFirstLetter(interaction.i18n("inventory.bouquets"))}: ${guy.inventory.items.bouquet} ${Utils.getEmoji("bouquet", client)}\n` +
+                                `${Utils.capitalizeFirstLetter(interaction.i18n("inventory.lootboxes"))}: ${guy.inventory.items.lootbox} ${Utils.getEmoji("lootbox", client)}`
+                        },
                     ],
                     color: 5793266,
                     timestamp: new Date(),
@@ -70,8 +128,33 @@ let command = new Command({
                 interaction.reply({ embeds: [embed_inv] });
                 break;
             case "stats":
+                let data = guy.stats[interaction.options.getString("game")];
+                let totalWin = 0
+                let totalLoss = 0
+                let fields = []
+                let color = 0x00ffff
+                let footer = { text: "Requested by " + interaction.user.tag }
+
+                Object.entries(data)
+                    .filter((a) => typeof a[1] == "object")
+                    .forEach((team: any) => {
+                        let obj = { name: Utils.capitalizeFirstLetter(team[0]), value: `Wins: ${team[1].win}\nLosses: ${team[1].lose}`, inline: true }
+                        totalWin += team[1].win
+                        totalLoss += team[1].lose
+                        fields.push(obj)
+                    })
+
+                data.tie = data.tie ?? 0
+                let total = totalLoss + totalWin + data.tie
+                var description = `Win Streak: ${data.winStreak}\nGames played: ${total}\n\nTotal Wins: ${totalWin}\nTotal Losses: ${totalLoss}\nTies: ${data.tie}\nFlees: ${data.flee}\n\nWinrate: ${((totalWin / total) * 100 + "").slice(0, 5)}%`
+                let title = client.users.cache.get(guy.user).tag + "'s Stats"
+
+                let embed = { description, fields, color, title, timestamp: Date.now(), footer, thumbnail: { url: interaction.user.avatarURL() } }
+                interaction.reply({ embeds: [embed] })
+
                 break;
-            case "profile":
+            case "card":
+                interaction.reply({ content: "Coming soon!" })
                 break;
             default:
                 interaction.reply("Invalid part.");

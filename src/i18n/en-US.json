@@ -1,0 +1,45 @@
+{
+    "_meta": {
+        "name": "English (US)",
+        "emoji": "🇺🇸"
+    },
+    "narratorbot": "Narrator Bot",
+    "unkown_error": "An unknown error has occurred. Please try again and report the bug using `/bug` if the problem persists.",
+    "ping": "Pong! {latency}ms",
+    "welcome": "Welcome to {botName}! I set your language to `{language}`. You can edit your preferences in the settings using `/settings`.\nTo get started, use the `/help` command.",
+    "no_access": {
+        "beta": "Command canceled. You need to be part of the beta program to use this command.",
+        "dev": "Command canceled. Only developers can use this command.",
+        "staff": "Command canceled. Only staff can use this command.",
+        "game": "Command canceled. You need to be in a game to use this command.",
+        "private": "Command canceled. The user set its profile to private.",
+        "paginator": "Action canceled. Please request your own message."
+    },
+    "inventory": {
+        "inventory": "inventory",
+        "badges": "badges",
+        "coins": "coins",
+        "roses": "roses",
+        "gems": "gems",
+        "bouquets": "bouquets",
+        "lootboxes": "lootboxes",
+        "items": "items",
+        "currencies": "currencies",
+        "no_badges": "*no badges yet.*"
+    },
+    "github": {
+        "bug":"Bug reported! Thank you for your contribution! You can view it here: <{url}>\n Any additional information and pictures can be commented there too.",
+        "suggestion":"Suggestion received! Thank you for your contribution! You can view it here: <{url}>\n Any additional information and pictures can be commented there too."
+    },
+    "error": {
+        "unknown": "An unknown error has occurred. Please try again and report the bug using `/bug` if the problem persists."
+    },
+    "not_found": {
+        "user": "User not found. The user you tried to find is not in our database yet.",
+        "setting": "Setting not found."
+    },
+    "settings": {
+        "updated": "Your settings have been updated! Your {setting} has been set to `{new}`. Previous value: `{old}`"
+    }
+
+}

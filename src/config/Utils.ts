@@ -15,66 +15,70 @@ and can be used without creating an instance of the class:
 
 */
 
-
-import { Collection, Emoji, Interaction, Message, MessageActionRow, MessageButton, Snowflake, User, Util } from "discord.js";
+import { ButtonInteraction, Collection, Emoji, GuildMember, Interaction, InteractionCollector, Message, MessageActionRow, MessageButton, MessageEmbed, MessageEmbedOptions, Snowflake, ThreadMember, User, Util } from "discord.js";
+import i18n from "../i18n";
 import players from "../schemas/player";
 import { client, ExtendedClient } from "../server";
+import { ExtendedCommandInteraction, ExtendedInteraction } from "./classes/extendedInteraction";
 
 // Types
-import { UserResolvables } from "./types";
+import { DBUser, UserResolvables } from "./types";
 
 class Utils {
     static util = Util;
     private constructor() { }
     static months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    static allLanguages: Array<any> = require("../i18n/allLangs")
 
     // Get the user id from a user
     static resolveUserId(user: UserResolvables): string {
-        if (user instanceof User) {
+        if (user instanceof User || user instanceof ThreadMember || user instanceof GuildMember) {
             return user.id;
         } else if (user instanceof Interaction) {
             return user.user.id;
+        } else if (user instanceof Message) {
+            return user.author.id;
         } else {
             // Typeof User is string
             let target = client.users.resolve(user) ??
                 client.users.cache.find(u => u.tag === user) ??
                 client.users.cache.find(u => u.username === user);
 
-            if (!target) throw new Error(`Could not resolve user ${user}`);
+            if (!target) throw new Error("not_found.user");
             return target.id;
         }
     }
 
+    // check if a object of the type DBUser has a badge
+    static async hasBadge(user: UserResolvables, badge: string): Promise<boolean> {
+        let dbUser: DBUser = await players.findOne({ user: this.resolveUserId(user) });
+        if (!dbUser) return false;
+        var has = false;
+        dbUser.inventory.badges.forEach((b) => {
+            if (b.name.toLowerCase() === badge.toLocaleLowerCase()) has = true;
+        });
+        return has;
+    }
+
     // Check if a user is in the beta group
+
     static async isBeta(user: UserResolvables): Promise<boolean> {
-        let userId = this.resolveUserId(user);
-        if (!userId) return false;
-        let player = await players.findOne({ user: userId });
-        if (player?.badges?.includes("beta")) return true;
-        else return false;
+        return this.hasBadge(user, "beta");
     }
 
     static async isDev(user: UserResolvables): Promise<boolean> {
-        let userId = this.resolveUserId(user);
-        if (!userId) return false;
-        let player = await players.findOne({ user: userId });
-        if (player?.badges?.some((element: string) => /dev/g.test(element))) return true;
-        else return false;
+        return this.hasBadge(user, "dev");
     }
 
     static async isStaff(user: UserResolvables): Promise<boolean> {
-        let userId = this.resolveUserId(user);
-        if (!userId) return false;
-        let player = await players.findOne({ user: userId });
-        if (player?.badges?.includes("staff")) return true;
-        else return false;
+        return this.hasBadge(user, "staff");
     }
 
     static async isNarrator(user: UserResolvables): Promise<boolean> {
         let userId = this.resolveUserId(user);
         if (!userId) return false;
-        let player = await players.findOne({ user: userId });
-        if (player?.badges?.some((element: string) => /narrator/g.test(element))) return true;
+        let player: DBUser = await players.findOne({ user: userId });
+        if (player.inventory.badges.some((element) => /narrator/g.test(element.name))) return true;
         else return false;
     }
 
@@ -108,15 +112,15 @@ class Utils {
         return Object.keys(options[i])[0]
     }
 
-    static disableButtons(message: Message) {
+    static disableButtons(message: Message | any) {
         message.components.forEach(component => {
             component.components.forEach(button => {
-                button.setDisabled(true);
+                button.disabled = true;
             });
         });
 
         return {
-            content: message.content ||  null,
+            content: message.content || null,
             embeds: message.embeds || [],
             components: message.components || []
         };
@@ -143,6 +147,83 @@ class Utils {
             }
         }
         return `${date.getUTCDate()}${suffix} ${this.months[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+    }
+
+    /**
+     * 
+     * @todo These functions
+     */
+    static isInGame(user: UserResolvables): Boolean {
+        return false
+    }
+
+    static getPossibleValues(setting: any) {
+        switch (setting.name) {
+            case "language":
+                return this.allLanguages.map(lang => {
+                    return {
+                        name: lang.name,
+                        value: lang.code,
+                        emoji: lang.emoji
+                    }
+                });
+            default:
+                return [];
+        }
+    }
+
+    static async buttonPaginator(interaction: ExtendedCommandInteraction, data: { embed: any, components?: any }[], page: number = 0, idle = 10000) {
+        let activeRow = { type: 1, components: [] };
+        let embed = data[page].embed;
+        let componentRow = data?.[page].components ? [...data[page].components] : [];
+
+        activeRow.components.push(
+            { type: 2, style: 3, emoji: "⏪", custom_id: "paginator_begin" },
+            { type: 2, style: 3, emoji: "◀", custom_id: "paginator_previous" },
+            { type: 2, style: 3, emoji: "▶", custom_id: "paginator_next" },
+            { type: 2, style: 3, emoji: "⏩", custom_id: "paginator_end" }
+        )
+        componentRow.push(activeRow);
+
+        let x = await interaction.editReply({ embeds: [embed], components: componentRow });
+
+        let coll = new InteractionCollector(client, { interactionType: "MESSAGE_COMPONENT", idle: 10000, message: x, filter: (i:ButtonInteraction) => i.isButton() && i.customId.startsWith("paginator_") });
+        coll.on("collect", async (collected: ButtonInteraction) => {
+            //if(!collected.isButton()) return;
+            if (collected.user.id != interaction.user.id) {
+                collected.reply({content: await this.i18n("no_access.paginator", collected.user.id), ephemeral: true});
+            }
+            let edited
+            if(collected.message[collected.message instanceof Message ? "editedAt" : "edited_timestamp"] > (edited || 0)) return;
+            switch (collected.customId) {
+                case "paginator_begin":
+                    page = 0;
+                    break;
+                case "paginator_previous":
+                    if (page != 0) page--;
+                    else page = data.length - 1;
+                    break;
+                case "paginator_next":
+                    if (page != data.length - 1) page++;
+                    else page = 0;
+                    break;
+                case "paginator_end":
+                    page = data.length - 1;
+                    break;
+            }
+            await collected.update({ embeds: [data[page].embed], components: componentRow.length == 1 ? componentRow : [...data[page].components, activeRow] });
+            edited = Date.now();
+        })
+        coll.on("end", async () => {
+            interaction.editReply(this.disableButtons(await interaction.fetchReply()));
+            return;
+        })
+    }
+
+    static async i18n(key: string, userId: string, replaceData?: object): Promise<string> {
+        let p: DBUser = await players.findOne({ user: userId })
+        let lang = p?.settings?.language ?? "en-US";
+        return i18n(key, lang, replaceData);
     }
 }
 

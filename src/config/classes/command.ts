@@ -4,6 +4,8 @@ export = class Command {
     name: String
     run: Function
     beta: Boolean
+    devOnly: Boolean
+    staffOnly: Boolean
     permissions: Array<PermissionResolvable>
     commandObject: ChatInputApplicationCommandData
     guildOnly: Boolean

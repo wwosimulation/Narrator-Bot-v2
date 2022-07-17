@@ -1,5 +1,5 @@
-import { CommandInteraction } from "discord.js";
 import Command = require("../config/classes/command");
+import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
 import { ExtendedClient } from "../server";
 
 let command = new Command({
@@ -56,7 +56,7 @@ let command = new Command({
             },
         ],
     },
-    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+    run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
         let body = `**Title:** ${interaction.options.getString("title")}
 
 ### What is the suggestion?
@@ -93,7 +93,7 @@ User ID: ${interaction.user.id}
         }
 
         let done = await client.github.request(`POST /repos/${client.config.github.owner}/${client.config.github.repo}/issues`, issue);
-        interaction.reply({ content: `Feature suggested! Thank you for your contribution! You can view it here: <${done.data.html_url}>\n Any additional information and pictures can be commented there too.`, ephemeral: true });
+        interaction.reply({ content: interaction.i18n("github.suggestion", {url: done.url}), ephemeral: true });
     }
 });
 

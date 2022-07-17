@@ -1,7 +1,32 @@
 {
+    "_meta": {
+        "name": "Deutsch",
+        "emoji": "🇩🇪"
+    },
     "narratorbot": "Narrator Bot",
-    "pong": "Pong!",
-    "bug": "Fehler gemeldet! Vielen Dank für deine Mithilfe! Du kannst deine Meldung hier ansehen <{url}>\nZusätzliche Informationen und Bilder können dort ebenfalls hinterlegt werden.",
-    "suggestion": "Vorschlag erhalten! Vielen Dank für deine Mithilfe! Du kannst deinen Vorschlag hier ansehen <{url}>\nZusätzliche Informationen und Bilder können dort ebenfalls hinterlegt werden.",
-    "no_badges": "*Keine Abzeichen vorhanden.*"
+    "unkown_error": "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut. Wenn das Problem weiterhin besteht, melde den bug mit `/bug`",
+    "ping": "Pong! {latency}ms",
+    "welcome": "Willkommen bei {botName}! Deine Sprache wurde automatisch auf `{language}` gesetzt. Du kannst dies jederzeit mit `/settings` ändern.\nWenn du zu Beginn Hilfe brauchst, nutze einfach `/help`\n\nWelcome to {botName}! I set your language to `{language}`. You can edit your preferences in the settings using `/settings`.\nTo get started, use the `/help` command.",
+    "no_access": {
+        "beta": "Befehl abgebrochen. Dieser Befehl ist momentan noch in der Beta.",
+        "dev": "Befehl abgebrochen. Dieser Befehl steht nur den Entwicklern zur Verfügung.",
+        "staff": "Befehl abgebrochen. Dieser Befehl steht nur Teammitgliedern zur Verfügung.",
+        "game": "Befehl abgebrochen. Dieser Befehl ist nur während eines Spiels zulässig."
+    },
+    "inventory": {
+        "inventory": "Inventar",
+        "badges": "Abzeichen",
+        "coins": "Münzen",
+        "roses": "Rosen",
+        "gems": "Edelsteine",
+        "bouquets": "Sträuße",
+        "lootboxes": "Truhen",
+        "items": "Gegenstände",
+        "currencies": "Währungen",
+        "no_badges": "*Keine Abzeichen vorhanden.*"
+    },
+    "github": {
+        "bug": "Fehler gemeldet! Vielen Dank für deine Mithilfe! Du kannst deine Meldung hier ansehen <{url}>\nZusätzliche Informationen und Bilder können dort ebenfalls hinterlegt werden.",
+        "suggestion": "Vorschlag erhalten! Vielen Dank für deine Mithilfe! Du kannst deinen Vorschlag hier ansehen <{url}>\nZusätzliche Informationen und Bilder können dort ebenfalls hinterlegt werden."
+    }
 }

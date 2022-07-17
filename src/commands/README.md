@@ -4,7 +4,7 @@ Every slash comman file in this folder should follow a special synatx so the sla
 ## Head
 Each command file should start with the basic imports.
 ```ts
-import { CommandInteraction } from "discord.js";
+import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
 import Command = require("../config/classes/command");
 import { ExtendedClient } from "../server";
 ```
@@ -30,9 +30,9 @@ There are also optional parameters defining who is able to use the commands or w
     betaOnly: true,
 ```
 
-We also need to execute some code after an interaction was created. Therefore we use a `run` fuction with a `CommandInteraction` and the `client` as parameters.
+We also need to execute some code after an interaction was created. Therefore we use a `run` fuction with a `ExtendedCommandInteraction` and the `client` as parameters.
 ```ts
-    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+    run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
         interaction.reply({content: `Pong! ${client.ws.ping}ms`});
     }
 });
@@ -44,7 +44,7 @@ module.exports = command;
 
 ## Template
 ```ts
-import { CommandInteraction } from "discord.js";
+import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
 import Command = require("../config/classes/command");
 import { ExtendedClient } from "../server";
 
@@ -53,7 +53,7 @@ let command = new Command({
         name: "",
         description: "",
     },
-    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+    run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
         interaction.reply({content: ""});
     }
 });

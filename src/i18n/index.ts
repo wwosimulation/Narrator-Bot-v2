@@ -15,11 +15,27 @@ Object().filter = (obj, predicate) =>
         .filter((key) => predicate(obj[key]))
         .reduce((res, key) => ((res[key] = obj[key]), res), {})
 
-module.exports = (key: string, language: string, replaceData = {}) => {
+export default (key: string, language: string, replaceData = {}) => {
     let chosenL = languages[language]
-    if (!chosenL) return `No language with code ${language} found!`
-    let string = chosenL[key]
-    if (!string) string = languages["en"][key]
+    if (!chosenL) chosenL = languages["en-US"]
+    let string = getSubString(key, chosenL) ?? null
+    if (!string) string = getSubString(key, languages["en-US"])
+    if (!string) return "N/A"
     string = stringTemplate(string, replaceData)
     return string
+}
+
+
+function getSubString(key: string, lang: JSON) {
+    let current = lang
+    let search = true
+    while(key.includes(".") && search) {
+        let split = key.split(".")
+        current = current[split[0]]
+        key = split.slice(1).join(".")
+        if(typeof current != "object" || typeof current[key] == "string") {
+            search = false
+        }
+    }
+    return current?.[key]
 }

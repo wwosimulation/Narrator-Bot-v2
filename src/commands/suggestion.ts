@@ -8,19 +8,19 @@ let command = new Command({
         description: "Suggest a new feature for the bot.",
         options: [
             {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "title",
                 description: "A short fitting title for this suggestion",
                 required: true,
             },
             {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "description",
                 description: "A detailed description of the suggestion including information and reasons",
                 required: true,
             },
             {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "part",
                 description: "The part of the bot that the suggestion is related to",
                 required: true,
@@ -31,7 +31,7 @@ let command = new Command({
                     { name: "Other (include in the description)", value: "Other" },
                 ],
             }, {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "game",
                 description: "The game that the bug is related to",
                 required: true,
@@ -42,7 +42,7 @@ let command = new Command({
                 ]
             },
             {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "origin",
                 description: "Where is this suggestion from?",
                 required: true,

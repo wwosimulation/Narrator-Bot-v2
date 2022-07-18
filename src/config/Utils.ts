@@ -5,9 +5,6 @@ The usage is other files the following:
 >   ...
 >   Utils.[function name](...[arguments])
 
-Utils form the discord.js library are used like this:
->   Utils.util.[function name](...[arguments])
-
 To create new functions you need the keyword *static* infornt of the method. 
 This means that the function is not a method of the class but a static function 
 and can be used without creating an instance of the class:
@@ -15,18 +12,17 @@ and can be used without creating an instance of the class:
 
 */
 
-import { ButtonInteraction, Collection, Emoji, GuildMember, Interaction, InteractionCollector, Message, MessageActionRow, MessageButton, MessageEmbed, MessageEmbedOptions, Snowflake, ThreadMember, User, Util } from "discord.js";
+import { BaseInteraction, ButtonInteraction, Emoji, GuildMember, InteractionCollector, Message, Snowflake, ThreadMember, User } from "discord.js";
 import i18n from "../i18n";
 import players from "../schemas/player";
 import { client, ExtendedClient } from "../server";
 import { ExtendedCommandInteraction, ExtendedInteraction } from "./classes/extendedInteraction";
+import { } from "./types";
 
 // Types
 import { DBUser, UserResolvables } from "./types";
 
 class Utils {
-    static util = Util;
-    private constructor() { }
     static months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     static allLanguages: Array<any> = require("../i18n/allLangs")
 
@@ -34,7 +30,7 @@ class Utils {
     static resolveUserId(user: UserResolvables): string {
         if (user instanceof User || user instanceof ThreadMember || user instanceof GuildMember) {
             return user.id;
-        } else if (user instanceof Interaction) {
+        } else if (user instanceof BaseInteraction) {
             return user.user.id;
         } else if (user instanceof Message) {
             return user.author.id;
@@ -187,7 +183,7 @@ class Utils {
 
         let x = await interaction.editReply({ embeds: [embed], components: componentRow });
 
-        let coll = new InteractionCollector(client, { interactionType: "MESSAGE_COMPONENT", idle: 10000, message: x, filter: (i:ButtonInteraction) => i.isButton() && i.customId.startsWith("paginator_") });
+        let coll = new InteractionCollector(client, { componentType: 2, idle: 10000, message: x, filter: (i:ButtonInteraction) => i.customId.startsWith("paginator_") });
         coll.on("collect", async (collected: ButtonInteraction) => {
             //if(!collected.isButton()) return;
             if (collected.user.id != interaction.user.id) {

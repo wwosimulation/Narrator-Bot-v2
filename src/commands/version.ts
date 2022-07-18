@@ -27,7 +27,7 @@ let command = new Command({
                 { name: "Commit Message", value: version.commitMessage },
                 { name: "Uptime", value: `<t:${((Date.now() - client.uptime)/1000).toFixed()}:R>` },                
             ],
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
             color: 5793266 // Blurple
         }
         interaction.reply({ embeds: [embed] });

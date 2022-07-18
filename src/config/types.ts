@@ -7,9 +7,11 @@ And use them in the following way:
 >   import { [type name] } from "[path]/types"
 */
 
-import { Interaction, User, UserResolvable } from "discord.js";
+import { BaseInteraction, User, UserResolvable } from "discord.js";
+import { ExtendedCommandInteraction, ExtendedInteraction } from "./classes/extendedInteraction";
 
-export type UserResolvables = User | UserResolvable | string | Interaction;
+export type Interactions = BaseInteraction | ExtendedInteraction | ExtendedCommandInteraction;
+export type UserResolvables = User | UserResolvable | string | Interactions;
 export type aura = "evil" | "good" | "unknown";
 export type team = "village" | "werewolves" | "solo killer" | "solo voting" | "sect" | "zombies" | "couple" | "solo";
 export interface DBUser {

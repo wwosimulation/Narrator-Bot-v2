@@ -11,53 +11,53 @@ let command = new Command({
         description: "Display some information about you/another user.",
         options: [
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "badges",
                 description: "Display the badges of a user.",
                 options: [
                     {
                         name: "user",
                         description: "The user to display information about. Pasting userID also works.",
-                        type: "USER",
+                        type: 6, // "USER"
                         required: false,
                     },
                 ],
             },
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "inventory",
                 description: "Display the inventory of a user.",
                 options: [
                     {
                         name: "user",
                         description: "The user to display information about. Pasting userID also works.",
-                        type: "USER",
+                        type: 6, // "USER"
                         required: false,
                     },
                 ],
             },
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "card",
                 description: "Display the profile card of a user.",
                 options: [
                     {
                         name: "user",
                         description: "The user to display information about. Pasting userID also works.",
-                        type: "USER",
+                        type: 6, // "USER"
                         required: false,
                     },
                 ],
             },
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "stats",
                 description: "Display the stats of a user.",
                 options: [
                     {
                         name: "game",
                         description: "The game to display information about.",
-                        type: "STRING",
+                        type: 3, // "STRING"
                         required: true,
                         choices: [
                             { name: "WOV", value: "wov" }
@@ -66,7 +66,7 @@ let command = new Command({
                     {
                         name: "user",
                         description: "The user to display information about. Pasting userID also works.",
-                        type: "USER",
+                        type: 6, // "USER"
                         required: false,
                     }
                 ],
@@ -100,7 +100,7 @@ let command = new Command({
                     title: `${user.tag}: ${interaction.i18n("inventory.badges")}`,
                     description,
                     color: 5793266,
-                    timestamp: new Date(),
+                    timestamp: new Date().toISOString(),
                 }
                 interaction.reply({ embeds: [embed_badges] });
                 break;
@@ -119,7 +119,7 @@ let command = new Command({
                         },
                     ],
                     color: 5793266,
-                    timestamp: new Date(),
+                    timestamp: new Date().toISOString(),
                     author: {
                         name: `${user.tag}`,
                         icon_url: user.avatarURL(),
@@ -149,7 +149,7 @@ let command = new Command({
                 var description = `Win Streak: ${data.winStreak}\nGames played: ${total}\n\nTotal Wins: ${totalWin}\nTotal Losses: ${totalLoss}\nTies: ${data.tie}\nFlees: ${data.flee}\n\nWinrate: ${((totalWin / total) * 100 + "").slice(0, 5)}%`
                 let title = client.users.cache.get(guy.user).tag + "'s Stats"
 
-                let embed = { description, fields, color, title, timestamp: Date.now(), footer, thumbnail: { url: interaction.user.avatarURL() } }
+                let embed = { description, fields, color, title, timestamp: new Date().toISOString(), footer, thumbnail: { url: interaction.user.avatarURL() } }
                 interaction.reply({ embeds: [embed] })
 
                 break;

@@ -3,6 +3,7 @@ import { ExtendedInteraction } from "../config/classes/extendedInteraction";
 import Utils from "../config/Utils";
 import player from "../schemas/player";
 import i18n from "../i18n";
+import { InteractionType } from "discord.js";
 
 export = {
     name: "interactionCreate",
@@ -24,7 +25,7 @@ export = {
         }
 
         // splitting events up
-        if (interaction.isApplicationCommand()) {
+        if (interaction.isChatInputCommand()) {
             let file = client.commands.get(interaction.command.name);
 
             // check if the user is allowed to use the command
@@ -42,16 +43,16 @@ export = {
             }
 
             file.run(interaction, client);
-        } else if (interaction.isAutocomplete()) {
+        } else if (interaction.type === 4) { // Autocomplete
             // autocomplete
             // do something
         } else if (interaction.isButton()) {
             // button
             // do something
-        } else if (interaction.isContextMenu()) {
+        } else if (interaction.isMessageContextMenuCommand()) {
             // context menu
             // do something
-        } else if (interaction.isModalSubmit()) {
+        } else if (interaction.type === 5) { // ModalSubmit
             // modal submit
             // do something
         }

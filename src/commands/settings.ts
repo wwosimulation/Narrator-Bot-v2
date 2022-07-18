@@ -2,7 +2,7 @@ import { ExtendedCommandInteraction } from "../config/classes/extendedInteractio
 import Command = require("../config/classes/command");
 import { ExtendedClient } from "../server";
 import Utils from "../config/Utils";
-import { ButtonInteraction, InteractionCollector, SelectMenuInteraction, Util } from "discord.js";
+import { ButtonInteraction, InteractionCollector, SelectMenuInteraction } from "discord.js";
 import player from "../schemas/player";
 import { DBUser } from "../config/types";
 
@@ -12,7 +12,7 @@ let _settings = [
         db: "language",
         title: "In what language would you like the bot to answer?",
         description: "The bot supports multiple languages. Everything that is not translated yet will be in English.\nThe bot automatically detected your language. If you used an unsupported language, the bot set it to `English (US)`.",
-        type: "string",
+        type: 3, // "STRING"
         default: "en-US",
         possible: require("../i18n/allLangs")
     }, {
@@ -31,12 +31,12 @@ let command = new Command({
         description: "Change your settings.",
         options: [
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "edit",
                 description: "Edit your settings.",
                 options: [
                     {
-                        type: "STRING",
+                        type: 3, // "STRING"
                         name: "setting",
                         description: "The setting to edit.",
                         required: true,
@@ -48,7 +48,7 @@ let command = new Command({
                 ]
             },
             {
-                type: "SUB_COMMAND",
+                type: 1, // "SUB_COMMAND"
                 name: "view",
                 description: "View your settings.",
             }
@@ -140,7 +140,7 @@ let command = new Command({
                 let y = await interaction.editReply({ embeds: [allData[_settings.findIndex(s => s.db == interaction.options.getString("setting"))].embed] });
                 Utils.buttonPaginator(interaction, allData, _settings.findIndex(s => s.db == interaction.options.getString("setting")));
 
-                let coll = new InteractionCollector(client, { idle: 5000, interactionType: "MESSAGE_COMPONENT", message: y, filter: (i: ButtonInteraction | SelectMenuInteraction) => i.customId.startsWith("settings_") });
+                let coll = new InteractionCollector(client, { idle: 5000, componentType: 2, message: y, filter: (i: ButtonInteraction | SelectMenuInteraction) => i.customId.startsWith("settings_") });
                 coll.on("collect", async (int: ButtonInteraction | SelectMenuInteraction) => {
                     let value = null
                     let se: any;

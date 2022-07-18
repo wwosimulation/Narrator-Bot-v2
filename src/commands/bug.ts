@@ -8,17 +8,17 @@ let command = new Command({
         description: "Report a bug",
         options: [
             {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "title",
                 description: "A short fitting title for the bug",
                 required: true
             }, {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "description",
                 description: "A detailed description of the bug and steps how to reproduce it",
                 required: true
             }, {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "part",
                 description: "The part of the bot that the bug is related to",
                 required: true,
@@ -29,7 +29,7 @@ let command = new Command({
                     { name: "General", value: "General" },
                 ]
             }, {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "game",
                 description: "The game that the bug is related to",
                 required: true,
@@ -39,7 +39,7 @@ let command = new Command({
                     { name: "none", value: "none" },
                 ]
             }, {
-                type: "STRING",
+                type: 3, // "STRING"
                 name: "gamecode",
                 description: "The gamecode of the game in case the bug happened in a game",
                 required: false

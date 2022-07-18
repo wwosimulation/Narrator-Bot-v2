@@ -23,7 +23,7 @@ export class ExtendedClient extends Client {
             parse: ["roles", "users"]
         }});
 
-        this.config = require("./config")
+        this.config = require("../index")
         this.events = new Collection();
         this.github = new Octokit({
             authStrategy: createAppAuth,

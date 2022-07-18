@@ -1,9 +1,5 @@
-import Command = require("../config/classes/command");
+import { Command, ExtendedCommandInteraction, ExtendedClient, DBUser, Utils } from "../config";
 import player from "../schemas/player";
-import { Utils } from "../config/Utils";
-import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
-import { DBUser } from "../config/types";
-import { ExtendedClient } from "../config";
 
 let command = new Command({
     commandObject: {

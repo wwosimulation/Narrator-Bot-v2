@@ -107,17 +107,22 @@ class Utils {
         return Object.keys(options[i])[0]
     }
 
-    static disableButtons(message: Message | any) {
-        message.components.forEach(component => {
-            component.components.forEach(button => {
-                button.disabled = true;
-            });
-        });
+    static disableButtons(message: Message) {
+        // copy all the message.components and disable them
+        let comps = []
+        message.components.forEach(comp => {
+            comps.push(comp.toJSON())
+        })
+        comps.forEach(comp => {
+            comp.components.forEach(c => {
+                c.disabled = true
+            })
+        })
 
         return {
             content: message.content || null,
             embeds: message.embeds || [],
-            components: message.components || []
+            components: comps || [],
         };
     }
 
@@ -184,12 +189,13 @@ class Utils {
 
         let coll = new InteractionCollector(client, { componentType: 2, idle: 10000, message: x, filter: (i:ButtonInteraction) => i.customId.startsWith("paginator_") });
         coll.on("collect", async (collected: ButtonInteraction) => {
-            //if(!collected.isButton()) return;
+            console.log(collected.customId);
             if (collected.user.id != interaction.user.id) {
                 collected.reply({content: await this.i18n("no_access.paginator", collected.user.id), ephemeral: true});
             }
             let edited
-            if(collected.message[collected.message instanceof Message ? "editedAt" : "edited_timestamp"] > (edited || 0)) return;
+            console.log(collected.message[collected.message instanceof Message ? "editedAt" : "edited_timestamp"])
+            if(new Date(collected.message[collected.message instanceof Message ? "editedAt" : "edited_timestamp"]) > (edited || 0)) return;
             switch (collected.customId) {
                 case "paginator_begin":
                     page = 0;
@@ -210,7 +216,8 @@ class Utils {
             edited = Date.now();
         })
         coll.on("end", async () => {
-            interaction.editReply(this.disableButtons(await interaction.fetchReply()));
+            console.log("ended");
+            await interaction.editReply(this.disableButtons(await interaction.fetchReply()));
             return;
         })
     }

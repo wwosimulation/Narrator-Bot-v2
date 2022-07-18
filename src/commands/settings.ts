@@ -51,7 +51,7 @@ let command = new Command({
         ],
     },
     run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
-        let sub = interaction.options.getSubcommand()
+        let sub = interaction.options.getSubcommand(true)
 
         // create embeds for each setting
         let settingEmbeds = _settings.map((s, i) => {
@@ -134,37 +134,37 @@ let command = new Command({
                 });
                 await interaction.deferReply();
                 let y = await interaction.editReply({ embeds: [allData[_settings.findIndex(s => s.db == interaction.options.getString("setting"))].embed] });
-                Utils.buttonPaginator(interaction, allData, _settings.findIndex(s => s.db == interaction.options.getString("setting")));
+                Utils.buttonPaginator(interaction, allData, _settings.findIndex(s => s.db == interaction.options.getString("setting")), 30_000);
 
-                let coll = new InteractionCollector(client, { idle: 5000, componentType: 2, message: y, filter: (i: ButtonInteraction | SelectMenuInteraction) => i.customId.startsWith("settings_") });
+                let coll = new InteractionCollector(client, { message: y, filter: (i: ButtonInteraction | SelectMenuInteraction) => i.customId.startsWith("settings_") });
                 coll.on("collect", async (int: ButtonInteraction | SelectMenuInteraction) => {
+                    console.log(int.customId);
                     let value = null
                     let se: any;
-                    if (int.customId.startsWith("settings_")) {
-                        se = _settings.find(s => s.db == int.customId.split("_")[2]);
-                        if (int instanceof ButtonInteraction) {
-                            if (int.customId.endsWith("true")) {
-                                value = true;
-                            } else if (int.customId.endsWith("false")) {
-                                value = false;
-                            }
-                        } else if (int instanceof SelectMenuInteraction) {
-                            value = int.values[0]
+
+                    se = _settings.find(s => s.db == int.customId.split("_")[2]);
+                    if (int instanceof ButtonInteraction) {
+                        if (int.customId.endsWith("true")) {
+                            value = true;
+                        } else if (int.customId.endsWith("false")) {
+                            value = false;
                         }
-                        let sett = {}
-                        sett["settings." + se.db] = value;
-                        await player.updateOne({ user: interaction.user.id }, { $set: sett })
-                        let old = interaction.dbUser.settings[se.db];
-                        let new_: DBUser = await player.findOne({ user: interaction.user.id })
-                        int.reply({ content: interaction.i18n("settings.updated", { setting: se.name, new: new_.settings[se.db], old: old }, new_.settings.language), ephemeral: true });
+                    } else if (int instanceof SelectMenuInteraction) {
+                        value = int.values[0]
                     }
+                    let sett = {}
+                    sett["settings." + se.db] = value;
+                    await player.updateOne({ user: interaction.user.id }, { $set: sett })
+                    let old = interaction.dbUser.settings[se.db];
+                    let new_: DBUser = await player.findOne({ user: interaction.user.id })
+                    int.reply({ content: interaction.i18n("settings.updated", { setting: se.name, new: new_.settings[se.db], old: old }, new_.settings.language), ephemeral: true });
 
                 });
-                break
+                break;
             case "view":
                 await interaction.deferReply();
                 Utils.buttonPaginator(interaction, settingEmbeds.map(e => { return { embed: e } }), 0);
-                break
+                break;
         }
     }
 });

@@ -1,4 +1,4 @@
-import { ExtendedClient, client } from "../server";
+import { client } from "../server";
 
 export = {
     name: "ready",

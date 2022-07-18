@@ -1,6 +1,4 @@
-import Command = require("../config/classes/command");
-import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
-import { ExtendedClient } from "../server";
+import { ExtendedClient, ExtendedCommandInteraction, Command } from "../config"
 
 let command = new Command({
     commandObject: {
@@ -61,10 +59,10 @@ The above bug was reported by ${interaction.user.tag}
 User ID: ${interaction.user.id}
 `
         let labels = ["Bug", "Unverified"];
-        if(interaction.options.getString("game") !== "none") {
+        if (interaction.options.getString("game") !== "none") {
             labels.push(interaction.options.getString("game"));
         }
-        if(interaction.options.getString("part") == "Economy") {
+        if (interaction.options.getString("part") == "Economy") {
             labels.push("Economy");
         }
 
@@ -72,12 +70,12 @@ User ID: ${interaction.user.id}
             title: `BUG: ${interaction.options.getString("title") ?? "N/A"}`,
             body,
             labels,
-            owner: client.config.github.owner, 
+            owner: client.config.github.owner,
             repo: client.config.github.repo
         }
 
         let done = await client.github.request(`POST /repos/${client.config.github.owner}/${client.config.github.repo}/issues`, issue);
-        interaction.reply({content: interaction.i18n("github.bug", {url: done.url}), ephemeral: true});
+        interaction.reply({ content: interaction.i18n("github.bug", { url: done.url }), ephemeral: true });
 
     }
 

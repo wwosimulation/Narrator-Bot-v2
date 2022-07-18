@@ -1,8 +1,8 @@
-import { Role } from "discord.js";
 import { ExtendedClient } from "./classes/client";
-import Command = require("./classes/command");
+import { AutoComplete, Command } from "./classes/command";
 import { ExtendedInteraction, ExtendedCommandInteraction } from "./classes/extendedInteraction";
-import { DBUser, Interactions, UserResolvables, aura, team } from "./types";
+import { Role } from "./classes/role";
+import { DBUser, Interactions, UserResolvables, aura, team, WOVRole } from "./types";
 import { Utils } from "./Utils";
 
 let github = {
@@ -21,14 +21,20 @@ export {
     ExtendedInteraction,
     ExtendedCommandInteraction,
     Command,
-    Role
+    Role,
+    AutoComplete,
 }
 
 // Types
 export {
-    DBUser,
     Interactions,
     UserResolvables,
     aura,
     team
+}
+
+// Interfaces
+export {
+    DBUser,
+    WOVRole
 }

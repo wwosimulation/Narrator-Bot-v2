@@ -4,9 +4,7 @@ Every slash comman file in this folder should follow a special synatx so the sla
 ## Head
 Each command file should start with the basic imports.
 ```ts
-import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
-import Command = require("../config/classes/command");
-import { ExtendedClient } from "../server";
+import { Command, ExtendedClient, ExtendedCommandInteraction } from "../config";
 ```
 You might also add other imports if needed.
 
@@ -44,9 +42,7 @@ module.exports = command;
 
 ## Template
 ```ts
-import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
-import Command = require("../config/classes/command");
-import { ExtendedClient } from "../server";
+import { Command, ExtendedClient, ExtendedCommandInteraction } from "../config";
 
 let command = new Command({
     commandObject: {
@@ -61,3 +57,18 @@ let command = new Command({
 
 module.exports = command;
 ```
+
+## ApplicationCommandOptionTypes
+| Type | Number |
+| ---- | ------ |
+| `Subcommand` | 1 |
+| `SubcommandGroup` | 2 |
+| `String` | 3 |
+| `Integer` | 4 |
+| `Boolean` | 5 |
+| `User` | 6 |
+| `Channel` | 7 |
+| `Role` | 8 |
+| `Mentionable` | 9 |
+| `Number` | 10 |
+| `Attachment` | 11 |

@@ -2,7 +2,8 @@ import { createAppAuth } from "@octokit/auth-app";
 import { Octokit } from "@octokit/core";
 import { Client, Collection } from "discord.js";
 import { readFileSync } from "fs";
-import Command = require("./command");
+import { AutoComplete, Command } from "..";
+
 
 export class ExtendedClient extends Client {
     config: any;
@@ -10,6 +11,7 @@ export class ExtendedClient extends Client {
     info: { branch: string; commit: string; }; // Set in the ready event
     github: Octokit;
     commands: Collection<String, Command>;
+    autocompletes: Collection<String, AutoComplete>;
     mongo: any;
 
     constructor() {
@@ -36,5 +38,6 @@ export class ExtendedClient extends Client {
         })
         this.info = { branch: "", commit: "" };
         this.commands = new Collection();
+        this.autocompletes = new Collection();
     }
 }

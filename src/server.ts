@@ -16,6 +16,7 @@ let client = new ExtendedClient();
 
 require("./handlers/events");
 require("./db");
+require("./handlers/autocomplete");
 
 Sentry.init({
     dsn: process.env.SENTRY_DSN,

@@ -3,11 +3,13 @@ import { ExtendedInteraction } from "../config/classes/extendedInteraction";
 import Utils from "../config/Utils";
 import player from "../schemas/player";
 import i18n from "../i18n";
-import { InteractionType } from "discord.js";
+import { AutocompleteInteraction, InteractionType } from "discord.js";
 
 export = {
     name: "interactionCreate",
     run: async (interaction: ExtendedInteraction) => {
+
+        if(!client.isReady()) return;
 
         interaction.i18n = (key: string, replaceData = {}, language = interaction?.dbUser?.settings?.language ?? "en-US"): string => {
             if(!language) language = "en-US";
@@ -43,9 +45,8 @@ export = {
             }
 
             file.run(interaction, client);
-        } else if (interaction.type === 4) { // Autocomplete
-            // autocomplete
-            // do something
+        } else if (interaction instanceof AutocompleteInteraction) { // Autocomplete
+            client.autocompletes.get(interaction.command.name).run(interaction, client);
         } else if (interaction.isButton()) {
             // button
             // do something

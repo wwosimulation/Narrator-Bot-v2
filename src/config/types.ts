@@ -25,3 +25,12 @@ export interface DBUser {
         warns: Array<{ date: Date; reason: string; moderator: string }>; ban: { date: Date; reason: string; moderator: string; };
     };
 }
+
+export interface WOVRole {
+    name: string;
+    aura: aura;
+    team: team;
+    aliases: string[];
+    description: string;
+    icon: string;
+}

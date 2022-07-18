@@ -1,6 +1,6 @@
 import { ChatInputApplicationCommandData, PermissionResolvable } from "discord.js"
 
-export = class Command {
+export class Command {
     name: String
     run: Function
     beta: Boolean
@@ -18,5 +18,15 @@ export = class Command {
         this.commandObject = object.commandObject
         this.guildOnly = object.guildOnly ?? false
         this.gameOnly = object.gameOnly ?? false
+    }
+}
+
+export class AutoComplete {
+    name: String
+    run: Function
+
+    constructor(object: {name: String, run: Function}) {
+        this.name = object.name
+        this.run = object.run
     }
 }

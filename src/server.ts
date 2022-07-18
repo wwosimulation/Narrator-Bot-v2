@@ -26,11 +26,11 @@ class ExtendedClient extends Client {
 
     constructor() {
         super({intents: [
-            "GUILDS",
-            "GUILD_EMOJIS_AND_STICKERS",
-            "GUILD_SCHEDULED_EVENTS",
-            "DIRECT_MESSAGES",
-            "GUILD_MEMBERS"
+            1, //"GUILDS",
+            2, //"GUILD_MEMBERS",
+            8, //"GUILD_EMOJIS_AND_STICKERS",
+            4096, //"GUILD_MESSAGES",
+            65536, //"GUILD_SCHEDULED_EVENTS",
         ], allowedMentions: {
             parse: ["roles", "users"]
         }});

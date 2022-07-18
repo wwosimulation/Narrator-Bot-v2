@@ -36,10 +36,3 @@ Object().filter = (obj, predicate) =>
     Object.keys(obj)
         .filter((key) => predicate(obj[key]))
         .reduce((res, key) => ((res[key] = obj[key]), res), {})
-
-/*let x = { index: -1 }
-setTimeout(async () => {
-    x = db.get("gamewarnIndex") || (await module.exports.gamewarn.findOne({}).sort({ index: -1 }))
-    await db.set("gamewarnIndex", x.index)
-}, 1000)
-*/

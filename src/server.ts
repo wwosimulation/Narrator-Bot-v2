@@ -2,9 +2,8 @@ console.log("Booting bot...");
 require("dotenv").config();
 
 import * as db from "quick.db";
-import { Octokit } from "@octokit/core";
-import { createAppAuth } from "@octokit/auth-app";
-import { readFileSync } from "fs"
+import * as Sentry from "@sentry/node";
+import { ExtendedClient } from "./config";
 
 if(db.get("emergencystop")) {
     setTimeout(() => {
@@ -13,50 +12,10 @@ if(db.get("emergencystop")) {
     }, 5000);
 }
 
-import { Client, Collection } from "discord.js";
-import Command = require("./config/classes/command");
-
-class ExtendedClient extends Client {
-    config: any;
-    events: Collection<String, File>;
-    info: { branch: string; commit: string; }; // Set in the ready event
-    github: Octokit;
-    commands: Collection<String, Command>;
-    mongo: any;
-
-    constructor() {
-        super({intents: [
-            1, //"GUILDS",
-            2, //"GUILD_MEMBERS",
-            8, //"GUILD_EMOJIS_AND_STICKERS",
-            4096, //"GUILD_MESSAGES",
-            65536, //"GUILD_SCHEDULED_EVENTS",
-        ], allowedMentions: {
-            parse: ["roles", "users"]
-        }});
-
-        this.config = require("./config")
-        this.events = new Collection();
-        this.github = new Octokit({
-            authStrategy: createAppAuth,
-            auth: {
-                appId: this.config.github.appId,
-                privateKey: readFileSync("./github-private-key.pem"),
-                clientSecret: process.env.GITHUB_APP_SECRET,
-                installationId: this.config.github.installationId
-            }
-        })
-        this.info = { branch: "", commit: "" };
-        this.commands = new Collection();
-    }
-}
-
 let client = new ExtendedClient();
 
 require("./handlers/events");
 require("./db");
-
-import * as Sentry from "@sentry/node";
 
 Sentry.init({
     dsn: process.env.SENTRY_DSN,
@@ -65,4 +24,4 @@ Sentry.init({
 
 client.login(process.env.DISCORD_TOKEN);
 
-export { ExtendedClient, client };
+export { client };

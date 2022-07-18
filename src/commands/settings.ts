@@ -1,10 +1,6 @@
-import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
-import Command = require("../config/classes/command");
-import { ExtendedClient } from "../server";
-import Utils from "../config/Utils";
 import { ButtonInteraction, InteractionCollector, SelectMenuInteraction } from "discord.js";
+import { Command, DBUser, ExtendedClient, ExtendedCommandInteraction, Utils } from "../config";
 import player from "../schemas/player";
-import { DBUser } from "../config/types";
 
 let _settings = [
     {

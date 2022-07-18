@@ -1,7 +1,7 @@
 import { aura, team } from "../types"
 
 // Base class for all roles
-class Role {
+export class Role {
     private name: string;
     private aura: aura;
     private team: team;

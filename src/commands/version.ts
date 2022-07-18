@@ -1,13 +1,11 @@
-import { CommandInteraction } from "discord.js";
-import Command = require("../config/classes/command");
-import { ExtendedClient } from "../server";
+import { Command, ExtendedClient, ExtendedCommandInteraction } from "../config";
 
 let command = new Command({
     commandObject: {
         name: "version",
         description: "Get all information about the bot's current version",
     },
-    run: async (interaction: CommandInteraction, client: ExtendedClient) => {
+    run: async (interaction: ExtendedCommandInteraction, client: ExtendedClient) => {
         // Get the version of the bot
         let version = {
             branch: client.info.branch,

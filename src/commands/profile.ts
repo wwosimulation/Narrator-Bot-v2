@@ -1,9 +1,9 @@
 import Command = require("../config/classes/command");
 import player from "../schemas/player";
-import { ExtendedClient } from "../server";
 import { Utils } from "../config/Utils";
 import { ExtendedCommandInteraction } from "../config/classes/extendedInteraction";
 import { DBUser } from "../config/types";
+import { ExtendedClient } from "../config";
 
 let command = new Command({
     commandObject: {

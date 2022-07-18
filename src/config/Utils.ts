@@ -13,11 +13,10 @@ and can be used without creating an instance of the class:
 */
 
 import { BaseInteraction, ButtonInteraction, Emoji, GuildMember, InteractionCollector, Message, Snowflake, ThreadMember, User } from "discord.js";
+import { ExtendedCommandInteraction, ExtendedClient } from ".";
 import i18n from "../i18n";
 import players from "../schemas/player";
-import { client, ExtendedClient } from "../server";
-import { ExtendedCommandInteraction, ExtendedInteraction } from "./classes/extendedInteraction";
-import { } from "./types";
+import { client } from "../server";
 
 // Types
 import { DBUser, UserResolvables } from "./types";

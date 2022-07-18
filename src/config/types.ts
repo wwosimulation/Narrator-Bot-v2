@@ -8,7 +8,7 @@ And use them in the following way:
 */
 
 import { BaseInteraction, User, UserResolvable } from "discord.js";
-import { ExtendedCommandInteraction, ExtendedInteraction } from "./classes/extendedInteraction";
+import { ExtendedInteraction, ExtendedCommandInteraction } from ".";
 
 export type Interactions = BaseInteraction | ExtendedInteraction | ExtendedCommandInteraction;
 export type UserResolvables = User | UserResolvable | string | Interactions;
